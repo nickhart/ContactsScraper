@@ -1,0 +1,30 @@
+From MAILER-DAEMON Fri Mar 28 22:40:10 2025
+From: Alice Example <alice@example.com>
+To: Bob Example <bob@example.com>
+Subject: Lunch Plans
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Hey Bob, want to grab lunch tomorrow?
+
+From MAILER-DAEMON Fri Mar 28 22:40:10 2025
+From: Charlie Work <charlie@company.com>
+To: alice@example.com
+Subject: Project Update
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Hi Alice, please send over the Q2 update when you get a chance.
+
+From MAILER-DAEMON Fri Mar 28 22:40:10 2025
+From: newsletter@news.com
+To: alice@example.com
+Subject: Weekly Roundup
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+Here's what happened this week in tech.
+

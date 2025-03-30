@@ -1,65 +1,79 @@
+
 # MBOX Contact Summary Tool
 
-This tool extracts email contact information from an `.mbox` file and summarizes it by:
-- Name
+This Python script extracts and summarizes contacts from one or more `.mbox` email archive files. It outputs a CSV file containing:
+
+- Name (from email headers or VCF)
 - Email address
-- Number of interactions (sent or received)
+- Number of interactions (sent/received)
+- First and last message dates
+- Categorization: Personal, Business, Listserv
 
-The output is saved as a `.csv` file for easy review and categorization.
+## ✅ Features
 
----
+- Supports **multiple MBOX input files**
+- Outputs a **combined CSV**
+- Supports a plaintext **allowlist of known personal email addresses**
+- Cross-references with optional VCF (via ChatGPT enrichment step)
+- Lightweight, fast, and runs locally (no dependencies except Python 3)
 
-## 📁 Files
-- `mbox_contact_summary.py` — The main script
-- `mock_test_sample.mbox` — A small test `.mbox` file with sample messages
+## 🧪 Example Usage
 
----
-
-## 🛠 How to Use
-
-### 1. Download or Clone the Script
-Save `mbox_contact_summary.py` and place it in your working directory.
-
-### 2. (Optional) Download Sample MBOX File
-Use the provided test file for trial runs:
-- [Download mock_test_sample.mbox](sandbox:/mnt/data/mock_test_sample.mbox)
-
-### 3. Configure the Script
-Open `mbox_contact_summary.py` and update the paths at the top:
-```python
-mbox_file_path = "mock_test_sample.mbox"
-output_csv_path = "contact_summary.csv"
-```
-
-### 4. Run the Script
-In your terminal:
 ```bash
-cd /path/to/script
-python3 mbox_contact_summary.py
+python3 mbox_contact_summary.py inbox1.mbox inbox2.mbox -o contacts.csv --cc --bcc --allowlist allowlist.txt
 ```
 
-### 5. Check the Output
-The script will generate:
-- `contact_summary.csv` — contains Name, Email, and Interaction Count
+> Note: `Bcc` headers are usually not present in standard MBOX exports, but if they are included, this flag ensures they're parsed.
 
-Open it in Excel, Numbers, or any CSV viewer.
+- `--allowlist allowlist.txt`: Optional file with one email per line (whitelisted as Personal)
+- `--cc` — Include email addresses from the CC field
+- `--bcc` — Include email addresses from the BCC field (if available in the MBOX)
+
+## 📦 Output Format
+
+The script creates a CSV with:
+
+| First Name | Last Name | Name | Email | Category | First Seen | Last Seen | Interaction Count |
+|------------|-----------|------|-------|----------|------------|-----------|-------------------|
+
+## 🧠 How Categorization Works
+
+- `Personal`: Free domains (e.g. Gmail, Yahoo) or allowlisted
+- `Business`: Company domains or unknown types
+- `Listserv`: Detected by headers like `List-Unsubscribe`, or automation patterns (`noreply`, etc.)
+
+## 🛠️ Installation
+
+No installation needed. Just place the script and `.mbox` files in the same directory or provide full paths.
+
+## 🔎 Using with ChatGPT (Optional)
+
+After generating the CSV, you can upload it to ChatGPT for:
+
+- **Further enrichment from a VCF file** (name, cross-referencing)
+- **Filtering by category or frequency**
+- **Merging with other contact exports**
+- **Preparing a contact import file (e.g. Apple Contacts, CRM)**
+
+### 🧪 Sample Prompts for ChatGPT
+
+- "Here's my `contact_summary.csv`. Can you cross-reference with this VCF file and fill in names?"
+- "Please split names into first and last columns if they aren't already."
+- "Can you filter this contact list to just personal emails with more than 5 interactions?"
+- "Generate two CSVs: one for Business and one for Personal contacts."
+
+## 📁 Sample Files
+
+- `mock_test_sample.mbox`: Minimal test file
+- `comprehensive_mock_test.mbox`: Full test for personal, business, and listserv cases
+
+## 🧹 Optional Improvements
+
+- Skip low-frequency contacts (e.g. only 1 message)
+- Export to SQLite or JSON
+- Add CLI filtering and thresholds
 
 ---
 
-## 🧪 Sample Output Format
-```
-Name,Email,Interaction Count
-Alice Example,alice@example.com,3
-Bob Example,bob@example.com,1
-Charlie Work,charlie@company.com,1
-newsletter@news.com,,1
-```
-
----
-
-## ✅ Next Steps
-- Upload the resulting `.csv` here to classify contacts as **Personal** or **Business**
-- You can also upload a `.vcf` file (exported iPhone contacts) to cross-reference
-
-Let me know if you'd like filters for year, domain, or other refinements!
-
+**Author:** Nicholas Hart  
+**Maintainer:** ChatGPT (assisted)

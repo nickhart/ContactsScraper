@@ -1,0 +1,6 @@
+Name,Email,Category,First Seen,Last Seen,Interaction Count
+User,user@example.com,Listserv,2021-01-01,2021-09-10,5
+Alice Smith,alice@gmail.com,Personal,2021-01-01,2021-09-10,2
+Bob from BizCorp,bob@bizcorp.com,Business,2021-03-02,2021-03-02,1
+No Reply,no-reply@googlegroups.com,Listserv,2021-05-05,2021-05-05,1
+Tech News Weekly,newsletter@technews.com,Listserv,2021-06-06,2021-06-06,1

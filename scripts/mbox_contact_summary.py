@@ -335,11 +335,11 @@ def main():
     parser.add_argument("mbox_files", nargs="*", help="Paths to MBOX files")
     parser.add_argument("--vcf", nargs="*", help="Paths to VCF files")
     parser.add_argument("--csv", nargs="*", help="Paths to CSV contact files")
-    parser.add_argument("--db", default="contacts.db", help="SQLite database file (default: contacts.db)")
+    parser.add_argument("--output", default="contacts.db", help="SQLite database file (default: contacts.db)")
     args = parser.parse_args()
     
     # Create or open the SQLite database using the provided filename
-    session = get_session(args.db)
+    session = get_session(args.output)
     
     # Process CSV contact files first
     if args.csv:
@@ -358,7 +358,7 @@ def main():
             print(f"Processing VCF file: {vcf_path}...")
             ingest_vcf_file(vcf_path, session)
     
-    print(f"✅ Done! Data stored in {args.db}")
+    print(f"✅ Done! Data stored in {args.output}")
 
 if __name__ == "__main__":
     main()

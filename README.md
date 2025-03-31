@@ -1,7 +1,24 @@
 # ContactsScraper - MBOX Contact Summary Tool
 
+- [ContactsScraper - MBOX Contact Summary Tool](#contactsscraper---mbox-contact-summary-tool)
+  - [Overview](#overview)
+    - [A note on ChatGPT](#a-note-on-chatgpt)
+  - [Purpose](#purpose)
+    - [The future of this project](#the-future-of-this-project)
+  - [✅ Features](#-features)
+  - [🧪 Example Usage](#-example-usage)
+  - [🧪 Example Usage](#-example-usage-1)
+  - [📦 Output Format](#-output-format)
+  - [🧠 Categorization Logic](#-categorization-logic)
+  - [🛠️ Installation](#️-installation)
+  - [🔎 Optional ChatGPT Integration](#-optional-chatgpt-integration)
+    - [🧪 ChatGPT Sample Prompts](#-chatgpt-sample-prompts)
+  - [📁 Sample Files](#-sample-files)
+  - [How to get your MBOX and VCF files](#how-to-get-your-mbox-and-vcf-files)
+  - [🧹 Possible Enhancements](#-possible-enhancements)
+
 ## Overview
-This project contains a collection of Python scripts which can extracts and summarize contacts from one or more `.mbox` email archive files. It collects information about each email address and inserts it into a database. Then a second script reads the database and attempts to categorize and filter the data, then outputs a CSV file containing:
+This project contains a collection of Python scripts which can extract and summarize contacts from one or more `.mbox` email archive files. It collects information about each email address and inserts it into a database. Then a second script reads the database and attempts to categorize and filter the data, then outputs a CSV file containing:
 
 - **Name** (extracted from email headers or optionally enriched from a VCF file)
 - **Email address**
@@ -24,14 +41,14 @@ address it encounters as personal, business, or a listserv.
 
 The `mbox_contact_summary.py` script reads the MBOX file(s) and deduces the email address of the account owner by finding the most commonly occurring email address. It iterates through each email and looks for markers that might help categorize the email (eg: "noreply" email addresses, presence of unsubscribe or other common listserv headers). Such markers, as well as the other headers are added to each record in the database.
 
-You can also supply a supplementary VCF or CSV file of contacts to `mbox_contact_summary.py`, which will be used to cross-reference emails where only the address is pressent and no name information. This can help fill in the details of a contact that may be missing from Gmail but are present in the account holder's phone. If there's another source of data to help fill in this information you can provide it via the CSV (this is a simple {first name, last name, email} format).
+You can also supply a supplementary VCF or CSV file of contacts to `mbox_contact_summary.py`, which will be used to cross-reference emails where only the address is present and no name information. This can help fill in the details of a contact that may be missing from Gmail but are present in the account holder's phone. If there's another source of data to help fill in this information you can provide it via the CSV (this is a simple {first name, last name, email} format).
 
 The `process_db.py` script processes the entries in the contacts DB
 It looks at every "to" and "from" address it finds and counts how many direct interactions there are between each candidate email address and the owner's. This "direct count" is added to the record for each candidate email address. The frequency of each email domain is also recorded, in case this is helpful for categorization or filtering purposes.
 
 I made several iterations on the logic of these scripts and then manually reviewed the results (containing literally thousands of email addresses). By sorting and filtering the data within a spreadsheet I was able to look for miscategorized email addresses. Sometimes I would manually cross-reference an email address by searching the account holder's gmail account and verify if this was someone with whom they had direct contact or they happened to be on an email chain.
 
-Eventually I arrived at the scripts in their current format and was able to reduce the number of candidate emails from thousands to hundreds. I used the `--min-occurrences` parameter to exclude emails with less than 3 interactions. I used `--recent-date 2021-01-01` to exclude any contact that hadn't been corresponded with since 1/1/2021. I scrutinized the "business" contacts (of which there were only a few dozen) and did find a few contacts that were using a business email address but clearly had a personal connection. Then I sorted ascending by number of interactions or by most recent interaction date, and manually checked the fewest/oldest contacts. Some of them were personal, but many seemed to be random conversations with people on listservs.
+Eventually I arrived at the scripts in their current format and was able to reduce the number of candidate emails from thousands to hundreds. I used the `--min-occurrences` parameter to exclude emails with less than 3 interactions. I used `--recent-date 2021-01-01` to exclude any contact that hadn't been corresponded with since 1/1/2021. I scrutinized the "business" contacts (of which there were only a few dozen) and did find a few contacts that were using a business email address but clearly had a personal connection. Then I sorted ascending by number of interactions or by most recent interaction date, and manually checked the fewest/oldest contacts. Some of them were personal, but many seemed to be random conversations with people on listservs. I manually deleted any row which appeared to be non-personal.
 
 Finally I used the script `format_email_list.py` to format a list of email addresses which could be copy/pasted into an email (or distribution list). 
 
@@ -81,8 +98,8 @@ python3 process_db.py --db contacts.db --output exported_contacts.csv \
 
 ## 📦 Output Format
 
-| First Name | Last Name | Name | Email | Category | First Seen | Last Seen | Interaction Count |
-|------------|-----------|------|-------|----------|------------|------------------------------|
+| Email | Name | Occurrences | First Occurrence | Last Occurrence | Category | Domain Frequency | Direct Count |
+|-------|------|-------------|------------------|-----------------|----------|------------------|--------------|
 
 
 ## 🧠 Categorization Logic

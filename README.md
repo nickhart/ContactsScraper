@@ -144,6 +144,9 @@ In order to export contacts from an iOS device you can use this [Apple support a
 
 - Add support for exporting data in SQLite or JSON format.
 - Additional command-line filters and customization (eg: exclude automated email addresses like "noreply").
+- Cleanup directory structure, refactor into multiple source files
+- Add unit tests and more test data
+- Improve and generalize categorization
 
 ---
 
